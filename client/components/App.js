@@ -22,7 +22,7 @@ export default class App extends Component {
     this.getData(this, '2016');
   }
   getData(ev, year) {
-    axios.get('gatAll?month=All&year=' + year)
+    axios.get('getAll?month=All&year=' + year)
       .then((response) => {
         ev.setState({ data: response.data });
         ev.setState({ selectedYear: parseInt(year) });

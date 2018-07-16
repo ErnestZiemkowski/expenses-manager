@@ -11,6 +11,7 @@ router.route('/insert')
     .post((req, res) => {
         let expense = new Expense();
         let body = req.body;
+        console.log(req.body);
         expense.description = body.description;
         expense.amount = body.amount;
         expense.month = body.month;

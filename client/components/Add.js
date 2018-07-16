@@ -48,6 +48,7 @@ class Add extends React.Component {
         });
     }
     handleSelectChange(e) {
+        e.preventDefault();
         if (e.target.name == 'month') {
             this.setState({
                 month: e.target.value
@@ -63,11 +64,12 @@ class Add extends React.Component {
         this.insertNewExpense(this);
     }
     insertNewExpense(e) {
+        console.log(e.state.description);
         axios.post('/insert',
             queryString.stringify({
                 description: e.state.description,
                 amount: e.state.amount,
-                month: this.state.month,
+                month: e.state.month,
                 year: e.state.year
             }), {
                     headers: {
@@ -81,9 +83,15 @@ class Add extends React.Component {
         });
     }
     handleTextChange(e) {
+        e.preventDefault();
         if(e.target.name == 'amount') {
             this.setState({
                 amount: e.target.value
+            });
+        }
+        if(e.target.name == 'description') {
+            this.setState({
+                description: e.target.value
             });
         }
     }
@@ -123,23 +131,66 @@ class Add extends React.Component {
                         </Link>
                         <br/>
                         <fieldset>
-                            <label for="description">Description:</label><input type="text" id="description" name="description" value={this.state.description} onChange={this.handleTextChange}></input>
-                            <label for="amount">Amount:</label><input type="number" id="amount" name="amount" value={this.state.amount} onChange={this.handleTextChange}></input>
-                            <label for="month">Month:</label><select id="month" name="month" value={this.state.month} onChange={this.handleSelectChange}>
-                                    <option value="Jan" id="Jan">January</option>
-                                    <option value="Feb" id="Feb">Febrary</option>
-                                    <option value="Mar" id="Mar">March</option>
-                                    <option value="Apr" id="Apr">April</option>
-                                    <option value="May" id="May">May</option>
-                                    <option value="Jun" id="Jun">June</option>
-                                    <option value="Jul" id="Jul">July</option>
-                                    <option value="Aug" id="Aug">August</option>
-                                    <option value="Sep" id="Sep">September</option>
-                                    <option value="Oct" id="Oct">October</option>
-                                    <option value="Nov" id="Nov">November</option>
-                                    <option value="Dec" id="Dec">December</option>
-                                </select>
-                            <label for="year">Year:</label><select id="year" name="year" value={this.state.year} onChange={this.handleSelectChange}>
+                            <label 
+                                for="description"
+                            >
+                                Description:
+                            </label>
+                            <input 
+                                type="text"
+                                id="description"
+                                name="description"
+                                value={this.state.description}
+                                onChange={this.handleTextChange}
+                            >
+                            </input>
+                            <label 
+                                for="amount"
+                            >
+                                Amount:
+                            </label>
+                            <input
+                                type="number"
+                                id="amount"
+                                name="amount"
+                                value={this.state.amount}
+                                onChange={this.handleTextChange}>
+                            </input>
+                            <label
+                                for="month"
+                            >
+                                Month:
+                            </label>
+                            <select 
+                                id="month"
+                                name="month"
+                                value={this.state.month}
+                                onChange={this.handleSelectChange}
+                            >
+                                <option value="Jan" id="Jan">January</option>
+                                <option value="Feb" id="Feb">Febrary</option>
+                                <option value="Mar" id="Mar">March</option>
+                                <option value="Apr" id="Apr">April</option>
+                                <option value="May" id="May">May</option>
+                                <option value="Jun" id="Jun">June</option>
+                                <option value="Jul" id="Jul">July</option>
+                                <option value="Aug" id="Aug">August</option>
+                                <option value="Sep" id="Sep">September</option>
+                                <option value="Oct" id="Oct">October</option>
+                                <option value="Nov" id="Nov">November</option>
+                                <option value="Dec" id="Dec">December</option>
+                            </select>
+                            <label 
+                                for="year"
+                            >
+                                Year:
+                            </label>
+                                <select 
+                                    id="year"
+                                    name="year"
+                                    value={this.state.year}
+                                    onChange={this.handleSelectChange}
+                                >
                                     <option value="2016" id="16">2016</option>
                                     <option value="2017" id="17">2017</option>
                                     <option value="2018" id="18">2018</option>
@@ -149,7 +200,7 @@ class Add extends React.Component {
                             </fieldset>
                         <div className='button-center'>
                                 <br/>
-                                <Button bsStyle="success" bsSize="small" onClick={this.onClick}>Add New Expense</Button>
+                                <Button bsStyle="success" bsSize="small" onSubmit={this.insertNewExpense(this)}>Add New Expense</Button>
                             </div>
                                 </Modal>
                                 </div>
