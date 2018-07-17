@@ -1,3 +1,11 @@
+h1 {
+  text-align: center;
+}
+
+body {
+
+}
+
 .button-col {
   width: 100px;
   text-align: center;
@@ -32,9 +40,10 @@ table {
   left: 400px;
   right: 20px;
   bottom: 20px;
-  background-color: #F5F5F5;
-  width:500px;
+  background: linear-gradient(to bottom right, #00fefd, #5c2cff);
+  width:700px;
   border: 1px solid #000;
+  color: white;
   border-radius: 4px;
   padding: 20px;
 }
@@ -48,8 +57,25 @@ table {
   background-color: rebeccapurple;
 }
 
+.select {
+  background-color: #b75bfd;
+  border: 1px solid black;
+}
+
 .button-center {
  text-align: center;
+}
+
+.add-expense-button {
+  font-family: Helvetica;
+  text-align: center;
+  border-radius: 10px;
+  border: 1px solid black;
+  background-color: #b75bfd;
+  color: white;
+  font-weight: bold;
+  width: 150px;
+  height: 30px;
 }
 
 label{
