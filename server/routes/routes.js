@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const Expense = require('../models/Expense');
+const queryString = require('querystring');
 
 router.get('/', (req, res) => {
     res.render('index')
@@ -11,7 +12,6 @@ router.route('/insert')
     .post((req, res) => {
         let expense = new Expense();
         let body = req.body;
-        console.log(req.body);
         expense.description = body.description;
         expense.amount = body.amount;
         expense.month = body.month;
@@ -21,7 +21,7 @@ router.route('/insert')
             if(err) {
                 res.send(err);
             }
-            res.send('Expense successfully added!');
+            res.send(JSON.stringify({message: 'Expense successfully added!'}));
         });
     });
 
@@ -49,7 +49,9 @@ router.get('/delete', (req, res) => {
         if(err) {
             res.send(err);
         }
-        res.send('Expense successfully deleted!');
+        res.send(queryString.stringify({
+            data: 'Expense successfully deleted!'
+        }));
     });
 });  
 

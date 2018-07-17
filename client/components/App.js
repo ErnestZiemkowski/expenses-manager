@@ -10,22 +10,24 @@ export default class App extends Component {
     super();
     this.state = {
       selectedMonth: 'Jan',
-      selectedYear: 2016,
+      selectedYear: 2018,
       data: []
     };
     this.getData = this.getData.bind(this);
   }
   componentDidMount() {
-    this.getData(this, '2016');
+    this.getData(this, '2018');
   }
   componentWillReceiveProps(nextProps) {
-    this.getData(this, '2016');
+    this.getData(this, '2018');
   }
   getData(ev, year) {
-    axios.get('getAll?month=All&year=' + year)
+    axios.get('http://localhost:8000/getAll?year=' + year + '&month=All')
       .then((response) => {
         ev.setState({ data: response.data });
         ev.setState({ selectedYear: parseInt(year) });
+      }).catch((error) => {
+        console.log(error);
       });
   }
 
@@ -39,7 +41,11 @@ export default class App extends Component {
         <table>
           <thead>
             <tr>
-              <th></th>
+              <th
+                className="button-col"
+              >
+                Lp.
+              </th>
               <th
                 className="desc-col"
               >
@@ -64,35 +70,34 @@ export default class App extends Component {
           </thead>
           <tbody>
             {
-              this.state.data.map((exp) => {
-                return 
-                  <tr>
-                    <td
-                      className='counterCell'
-                    >
-                    </td>
-                    <td 
-                      className='desc-col'
-                    >
-                      {exp.description}
-                    </td>
-                    <td 
-                      className='button-col'
-                    >
-                      {exp.amount}
-                    </td>
-                    <td
-                      className='button-col'
-                    >
-                      {exp.month}
-                    </td>
-                    <td
-                      className='button-col'
-                    >
-                      {exp.year}
-                    </td>
-                  </tr>
-              })
+              this.state.data.map((exp, _id) =>               
+                <tr key={_id}>
+                  <td
+                    className='counterCell'
+                  >
+                  </td>
+                  <td 
+                    className='desc-col'
+                  >
+                    {exp.description}
+                  </td>
+                  <td 
+                    className='button-col'
+                  >
+                    {exp.amount}
+                  </td>
+                  <td
+                    className='button-col'
+                  >
+                    {exp.month}
+                  </td>
+                  <td
+                    className='button-col'
+                  >
+                    {exp.year}
+                  </td>
+                </tr>
+              )
             }
           </tbody>
         </table>

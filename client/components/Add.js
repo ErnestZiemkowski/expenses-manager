@@ -16,13 +16,12 @@ class Add extends React.Component {
             year: '',
             messageFromServer: '',
             modalIsOpen: false
-        }
+        };
         this.handleSelectChange = this.handleSelectChange.bind(this);
-        this.onClick = this.onClick.bind();
         this.handleTextChange = this.handleTextChange.bind(this);
-        this.insertNewExpense = this.insertNewExpense.bind(this);
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
     openModal() {
         this.setState({
@@ -47,40 +46,8 @@ class Add extends React.Component {
             year: this.props.selectedYear
         });
     }
-    handleSelectChange(e) {
-        e.preventDefault();
-        if (e.target.name == 'month') {
-            this.setState({
-                month: e.target.value
-            });
-        }
-        if (e.target.name == 'year') {
-            this.setState({
-                year: e.target.value
-            });
-        }
-    }
-    onClick(e) {
-        this.insertNewExpense(this);
-    }
-    insertNewExpense(e) {
-        console.log(e.state.description);
-        axios.post('/insert',
-            queryString.stringify({
-                description: e.state.description,
-                amount: e.state.amount,
-                month: e.state.month,
-                year: e.state.year
-            }), {
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    }
-                }
-        ).then((response) => {
-            e.setState({
-                messageFromServer: response.data
-            });
-        });
+    componentWillMount() {
+        Modal.setAppElement('body');
     }
     handleTextChange(e) {
         e.preventDefault();
@@ -94,6 +61,38 @@ class Add extends React.Component {
                 description: e.target.value
             });
         }
+    }
+    handleSelectChange(e) {
+        e.preventDefault();
+        if (e.target.name == 'month') {
+            this.setState({
+                month: e.target.value
+            });
+        }
+        if (e.target.name == 'year') {
+            this.setState({
+                year: e.target.value
+            });
+        }
+    }
+    handleSubmit(e) {
+        e.preventDefault();
+        axios.post('http://localhost:8000/insert',
+            queryString.stringify({
+                description: this.state.description,
+                amount: this.state.amount,
+                month: this.state.month,
+                year: this.state.year
+            }), {
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    }
+                }
+        ).then((response) => {
+            this.setState({
+                messageFromServer: response.data.message
+            });
+        });
     }
     render() {
         if(this.state.messageFromServer == ''){
@@ -110,6 +109,8 @@ class Add extends React.Component {
                         </span>
                     </Button>
                     <Modal
+                        className="Modal"
+                        // overlayClassName="overlay"
                         isOpen={this.state.modalIsOpen}
                         onRequestClose={this.closeModal}
                         contentLabel="Add Expense"
@@ -120,7 +121,7 @@ class Add extends React.Component {
                         >
                             <Button
                                 bsStyle="danger"
-                                bsSize="mini"
+                                bsSize="small"
                                 onClick={this.closeModal}
                             >
                                 <span 
@@ -130,80 +131,90 @@ class Add extends React.Component {
                             </Button>
                         </Link>
                         <br/>
-                        <fieldset>
+                        <form onSubmit={this.handleSubmit}>
                             <label 
-                                for="description"
+                                htmlFor="description"
                             >
                                 Description:
                             </label>
                             <input 
-                                type="text"
                                 id="description"
+                                className="select"
                                 name="description"
+                                type="text"
                                 value={this.state.description}
                                 onChange={this.handleTextChange}
                             >
                             </input>
+                            <br/>
                             <label 
-                                for="amount"
+                                htmlFor="amount"
                             >
                                 Amount:
                             </label>
                             <input
-                                type="number"
                                 id="amount"
+                                className="select"
                                 name="amount"
+                                type="number"
                                 value={this.state.amount}
-                                onChange={this.handleTextChange}>
+                                onChange={this.handleTextChange}
+                            >
                             </input>
+                            <br/>
                             <label
-                                for="month"
+                                htmlFor="month"
                             >
                                 Month:
                             </label>
                             <select 
                                 id="month"
+                                className="select"
                                 name="month"
                                 value={this.state.month}
                                 onChange={this.handleSelectChange}
                             >
-                                <option value="Jan" id="Jan">January</option>
-                                <option value="Feb" id="Feb">Febrary</option>
-                                <option value="Mar" id="Mar">March</option>
-                                <option value="Apr" id="Apr">April</option>
+                                <option value="January" id="Jan">January</option>
+                                <option value="February" id="Feb">February</option>
+                                <option value="March" id="Mar">March</option>
+                                <option value="April" id="Apr">April</option>
                                 <option value="May" id="May">May</option>
-                                <option value="Jun" id="Jun">June</option>
-                                <option value="Jul" id="Jul">July</option>
-                                <option value="Aug" id="Aug">August</option>
-                                <option value="Sep" id="Sep">September</option>
-                                <option value="Oct" id="Oct">October</option>
-                                <option value="Nov" id="Nov">November</option>
-                                <option value="Dec" id="Dec">December</option>
+                                <option value="June" id="Jun">June</option>
+                                <option value="July" id="Jul">July</option>
+                                <option value="August" id="Aug">August</option>
+                                <option value="September" id="Sep">September</option>
+                                <option value="October" id="Oct">October</option>
+                                <option value="November" id="Nov">November</option>
+                                <option value="December" id="Dec">December</option>
                             </select>
+                            <br/>
                             <label 
-                                for="year"
+                                htmlFor="year"
                             >
                                 Year:
                             </label>
-                                <select 
-                                    id="year"
-                                    name="year"
-                                    value={this.state.year}
-                                    onChange={this.handleSelectChange}
-                                >
-                                    <option value="2016" id="16">2016</option>
-                                    <option value="2017" id="17">2017</option>
-                                    <option value="2018" id="18">2018</option>
-                                    <option value="2019" id="19">2019</option>
-                                    <option value="2020" id="20">2020</option>
-                                </select>
-                            </fieldset>
-                        <div className='button-center'>
-                                <br/>
-                                <Button bsStyle="success" bsSize="small" onSubmit={this.insertNewExpense(this)}>Add New Expense</Button>
-                            </div>
-                                </Modal>
-                                </div>
+                            <select 
+                                id="year"
+                                className="select"
+                                name="year"
+                                value={this.state.year}
+                                onChange={this.handleSelectChange}
+                            >
+                                <option value="2016" id="16">2016</option>
+                                <option value="2017" id="17">2017</option>
+                                <option value="2018" id="18">2018</option>
+                                <option value="2019" id="19">2019</option>
+                                <option value="2020" id="20">2020</option>
+                            </select>
+                            <br/>
+                            <input 
+                                className="add-expense-button"
+                                type="submit"
+                                value="Add Expense"
+                            />
+                        </form>
+                    </Modal>
+                </div>
                             )
                         }
                         else{
@@ -236,7 +247,7 @@ class Add extends React.Component {
                                             >
                                                 <Button 
                                                     bsStyle="success" 
-                                                    bsSize="mini" 
+                                                    bsSize="small" 
                                                     onClick={this.closeModal}
                                                 >
                                                     Close the Dialog
