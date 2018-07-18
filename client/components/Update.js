@@ -1,27 +1,36 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
 import Modal from 'react-modal';
 import axios from 'axios';
+import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-
 const queryString = require('querystring');
 
-class Add extends React.Component {
+class Update extends React.Component {
     constructor() {
         super();
         this.state = {
+            id: '',
             description: '',
             amount: '',
             month: '',
             year: '',
             messageFromServer: '',
             modalIsOpen: false
-        };
-        this.handleSelectChange = this.handleSelectChange.bind(this);
-        this.handleTextChange = this.handleTextChange.bind(this);
+        }
         this.openModal = this.openModal.bind(this);
-        this.closeModal = this.closeModal.bind(this);
+        this.closeModal = this.closeModal.bind(this); 
+        this.handleTextChange = this.handleTextChange.bind(this);
+        this.handleSelectChange = this.handleSelectChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    componentDidMount() {
+        this.setState({
+            id: this.props.expense._id,
+            description: this.props.expense.description,
+            amount: this.props.expense.amount,
+            month: this.props.expense.month,
+            year: this.props.expense.year,
+        });
     }
     openModal() {
         this.setState({
@@ -30,24 +39,8 @@ class Add extends React.Component {
     }
     closeModal() {
         this.setState({
-            description: '',
-            amount: '',
-            month: 'Jan',
-            year: 2018,
-            messageFromServer: '',
             modalIsOpen: false
         });
-    }
-    componentDidMount() {
-        this.setState({
-            month: this.props.selectedMonth
-        });
-        this.setState({
-            year: this.props.selectedYear
-        });
-    }
-    componentWillMount() {
-        Modal.setAppElement('body');
     }
     handleTextChange(e) {
         e.preventDefault();
@@ -77,8 +70,9 @@ class Add extends React.Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-        axios.post('http://localhost:8000/insert',
-            queryString.stringify({
+        axios.post('http://localhost:8000/update', 
+            queryString.stringify({ 
+                _id: this.state.id,
                 description: this.state.description,
                 amount: this.state.amount,
                 month: this.state.month,
@@ -95,16 +89,16 @@ class Add extends React.Component {
         });
     }
     render() {
-        if(this.state.messageFromServer == ''){
+        if(this.state.messageFromServer == '') {
             return (
                 <div>
                     <Button
-                        bsStyle="success"
+                        bsStyle="warning"
                         bsSize="small"
                         onClick={this.openModal}
                     >
                         <span
-                            className="glyphicon glyphicon-plus"
+                            className="glyphicon glyphicon-edit"
                         >
                         </span>
                     </Button>
@@ -115,15 +109,15 @@ class Add extends React.Component {
                         contentLabel="Add Expense"
                     >
                         <Link
-                            to={{ pathname: '/', search: '' }}
-                            style={{ textDecoration: 'none' }}
+                            to={{pathname: '/', search: ''}}
+                            style={{textDecoration: 'none'}}
                         >
                             <Button
                                 bsStyle="danger"
                                 bsSize="small"
                                 onClick={this.closeModal}
                             >
-                                <span 
+                                <span
                                     className="closebtn glyphicon glyphicon-remove"
                                 >
                                 </span>
@@ -215,12 +209,11 @@ class Add extends React.Component {
                     </Modal>
                 </div>
             );
-        }
-        else{
+        } else {
             return (
                 <div>
                     <Button 
-                        bsStyle="success"
+                        bsStyle="warning"
                         bsSize="small"
                         onClick={this.openModal}
                     >
@@ -260,4 +253,4 @@ class Add extends React.Component {
     }
 }
 
-export default Add;
+export default Update;

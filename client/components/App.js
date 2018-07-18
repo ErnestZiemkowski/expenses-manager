@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import '../css/App.css';
 import axios from 'axios';
 import Add from './Add';
+import Update from './Update';
 
 export default class App extends Component {
 
@@ -66,6 +67,11 @@ export default class App extends Component {
               >
                 Year
               </th>
+              <th
+                className="button-col"
+              >
+                Update
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -95,6 +101,11 @@ export default class App extends Component {
                     className='button-col'
                   >
                     {exp.year}
+                  </td>
+                  <td
+                    className='button-col'
+                  >
+                  <Update expense={exp} />
                   </td>
                 </tr>
               )
