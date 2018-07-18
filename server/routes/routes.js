@@ -34,12 +34,11 @@ router.route('/update')
             month: body.month,
             year: body.year    
         };
-        console.log(doc);
         Expense.update({ _id: body._id }, doc, (err, result) => {
             if(err) {
                 res.send(err);
             }
-            res.send('Expense successfully updated!');
+            res.send(JSON.stringify({message: 'Expense successfully updated!'}));
         });
     });    
 
