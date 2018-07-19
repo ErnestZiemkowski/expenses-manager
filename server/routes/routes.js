@@ -48,9 +48,7 @@ router.get('/delete', (req, res) => {
         if(err) {
             res.send(err);
         }
-        res.send(queryString.stringify({
-            data: 'Expense successfully deleted!'
-        }));
+        res.send(JSON.stringify({message: 'Expense successfully deleted!'}));
     });
 });  
 
