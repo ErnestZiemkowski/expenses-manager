@@ -4,6 +4,7 @@ import '../css/App.css';
 import axios from 'axios';
 import Add from './Add';
 import Update from './Update';
+import Delete from './Delete';
 
 export default class App extends Component {
 
@@ -15,6 +16,7 @@ export default class App extends Component {
       data: []
     };
     this.getData = this.getData.bind(this);
+    
   }
   componentDidMount() {
     this.getData(this, '2018');
@@ -31,8 +33,21 @@ export default class App extends Component {
         console.log(error);
       });
   }
+  onDelete(exp) {
+    console.log(exp);
+    let expenses = this.state.data;
+    for(let i = 0; i < expenses.length; i++) {
+      if(expenses[i]._id == exp._id) {
+        expenses.splice(i,1);
+      }
+    }
+    this.setState({
+      data: expenses
+    });
+  }
 
   render() {
+    console.log(this.state.data);
     return (
       <div>
         <Add
@@ -72,12 +87,17 @@ export default class App extends Component {
               >
                 Update
               </th>
+              <th
+                className="button-col"
+              >
+                Delete
+              </th>
             </tr>
           </thead>
           <tbody>
             {
               this.state.data.map((exp, _id) =>               
-                <tr key={_id}>
+                <tr key={_id} >
                   <td
                     className='counterCell'
                   >
@@ -106,6 +126,11 @@ export default class App extends Component {
                     className='button-col'
                   >
                   <Update expense={exp} />
+                  </td>
+                  <td
+                    className='button-col'
+                  >
+                  <Delete id={exp._id} expense={exp} onClick={this.onDelete.bind(this, exp)}/>
                   </td>
                 </tr>
               )
