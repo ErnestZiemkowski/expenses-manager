@@ -20,7 +20,7 @@
     "webpack": "webpack",
     "start": "webpack-dev-server --config ./webpack.config.js --mode development",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "mocha",
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:8000",
@@ -38,9 +38,14 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
     "jshint-loader": "^0.8.4",
+    "mocha": "^5.2.0",
     "nodemon": "^1.17.5",
     "react-hot-loader": "^4.3.3",
+    "request": "^2.87.0",
+    "should": "^13.2.1",
     "webpack": "^4.15.1",
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.4"

@@ -3,9 +3,20 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const Expense = require('../models/Expense');
 const queryString = require('querystring');
+const mongoose = require('mongoose');
 
 router.get('/', (req, res) => {
     res.render('index')
+});
+
+router.get('/get', (req, res) => {
+    let id = req.query.id;
+    Expense.findById(id, (err, expense) => {
+        if (err) {
+            res.send(err);
+        } 
+        res.send(expense);  
+    });
 });
 
 router.route('/insert')
@@ -21,7 +32,7 @@ router.route('/insert')
             if(err) {
                 res.send(err);
             }
-            res.send(JSON.stringify({message: 'Expense successfully added!'}));
+            res.send(JSON.stringify({message: 'Expense successfully added!', body: expense}));
         });
     });
 
@@ -38,17 +49,17 @@ router.route('/update')
             if(err) {
                 res.send(err);
             }
-            res.send(JSON.stringify({message: 'Expense successfully updated!'}));
+            res.send(JSON.stringify({message: 'Expense successfully updated!', body: doc, result}));
         });
     });    
 
-router.get('/delete', (req, res) => {
+router.delete('/delete', (req, res) => {
     let id = req.query.id;
-    Expense.findById({_id: id}).remove().exec((err, expense) => {
+    Expense.remove({_id: id}, (err, result) => {
         if(err) {
             res.send(err);
         }
-        res.send(JSON.stringify({message: 'Expense successfully deleted!'}));
+        res.send(JSON.stringify({message: 'Expense successfully deleted!', result}));
     });
 });  
 

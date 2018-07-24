@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const expenseSchema = new Schema({
+    _id: { type: Schema.ObjectId, auto: true},
     description: String,
     amount: Number,
     month: String,
