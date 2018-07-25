@@ -17,11 +17,22 @@ class Add extends React.Component {
             messageFromServer: '',
             modalIsOpen: false
         };
-        this.handleSelectChange = this.handleSelectChange.bind(this);
-        this.handleTextChange = this.handleTextChange.bind(this);
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
+        this.handleTextChange = this.handleTextChange.bind(this);
+        this.handleSelectChange = this.handleSelectChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    componentDidMount() {
+        this.setState({
+            month: this.props.selectedMonth
+        });
+        this.setState({
+            year: this.props.selectedYear
+        });
+    }
+    componentWillMount() {
+        Modal.setAppElement('body');
     }
     openModal() {
         this.setState({
@@ -37,17 +48,6 @@ class Add extends React.Component {
             messageFromServer: '',
             modalIsOpen: false
         });
-    }
-    componentDidMount() {
-        this.setState({
-            month: this.props.selectedMonth
-        });
-        this.setState({
-            year: this.props.selectedYear
-        });
-    }
-    componentWillMount() {
-        Modal.setAppElement('body');
     }
     handleTextChange(e) {
         e.preventDefault();
@@ -77,7 +77,7 @@ class Add extends React.Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-        axios.post('http://localhost:8000/insert',
+        axios.post('http://localhost:8000/expense',
             queryString.stringify({
                 description: this.state.description,
                 amount: this.state.amount,

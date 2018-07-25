@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -19,7 +18,7 @@ class Delete extends React.Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-        axios.get('http://localhost:8000/delete?id=' + this.state.id)
+        axios.delete('http://localhost:8000/expense/' + this.state.id)
             .then((response) => {
                 this.setState({
                     messageFromState: response.data.message

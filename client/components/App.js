@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import '../css/App.css';
 import axios from 'axios';
 import Add from './Add';
@@ -25,7 +24,7 @@ export default class App extends Component {
     this.getData(this, '2018');
   }
   getData(ev, year) {
-    axios.get('http://localhost:8000/getAll?year=' + year + '&month=All')
+    axios.get('http://localhost:8000/expenses/All/' + year)
       .then((response) => {
         ev.setState({ data: response.data });
         ev.setState({ selectedYear: parseInt(year) });
@@ -34,7 +33,6 @@ export default class App extends Component {
       });
   }
   onDelete(exp) {
-    console.log(exp);
     let expenses = this.state.data;
     for(let i = 0; i < expenses.length; i++) {
       if(expenses[i]._id == exp._id) {
@@ -47,7 +45,6 @@ export default class App extends Component {
   }
 
   render() {
-    console.log(this.state.data);
     return (
       <div>
         <Add

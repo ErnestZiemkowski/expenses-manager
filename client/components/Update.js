@@ -70,7 +70,7 @@ class Update extends React.Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-        axios.post('http://localhost:8000/update', 
+        axios.put('http://localhost:8000/expense/' + this.state.id, 
             queryString.stringify({ 
                 _id: this.state.id,
                 description: this.state.description,
