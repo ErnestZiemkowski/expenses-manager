@@ -3,6 +3,8 @@ import { Button } from 'react-bootstrap';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RadioButton';
 
 const queryString = require('querystring');
 
@@ -11,9 +13,13 @@ class Add extends React.Component {
         super();
         this.state = {
             description: '',
+            descriptionError: '',
             amount: '',
+            amountError: '',
             month: '',
+            monthError: '',
             year: '',
+            yearError: '',
             messageFromServer: '',
             modalIsOpen: false
         };
@@ -77,6 +83,9 @@ class Add extends React.Component {
     }
     handleSubmit(e) {
         e.preventDefault();
+        if (!e.target.chechValidity()) {
+            this
+        }
         axios.post('http://localhost:8000/expense',
             queryString.stringify({
                 description: this.state.description,
@@ -130,7 +139,22 @@ class Add extends React.Component {
                             </Button>
                         </Link>
                         <br/>
-                        <form onSubmit={this.handleSubmit}>
+                        <form>
+                            <TextField
+                                name='description'
+                                hintText='Describe your expense'
+                                floatingLabelText='Description'
+                                value={this.state.description}
+                                onChange={this.handleTextChange}
+                                errorText={this.state.descriptionError}
+                                floatingLabelFixed
+                            />
+                            <br />
+                        </form>
+                        {/* <form 
+                            onSubmit={this.handleSubmit}
+                            noValidate
+                        >
                             <label 
                                 htmlFor="description"
                             >
@@ -143,6 +167,7 @@ class Add extends React.Component {
                                 type="text"
                                 value={this.state.description}
                                 onChange={this.handleTextChange}
+                                required
                             >
                             </input>
                             <br/>
@@ -158,6 +183,7 @@ class Add extends React.Component {
                                 type="number"
                                 value={this.state.amount}
                                 onChange={this.handleTextChange}
+                                required
                             >
                             </input>
                             <br/>
@@ -211,7 +237,7 @@ class Add extends React.Component {
                                 type="submit"
                                 value="Add Expense"
                             />
-                        </form>
+                        </form> */}
                     </Modal>
                 </div>
             );
