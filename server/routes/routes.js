@@ -9,10 +9,11 @@ router.get('/', (req, res) => {
 router.route('/expense/:id')
     .get((req, res) => {getExpense(req,res)})
     .delete((req, res) => {deleteExpense(req, res)})
-    .put((res, req) => {updateExpense(res, req)});
+    // .put((res, req) => {updateExpense(res, req)});
 
 router.route('/expense')
-    .post((req, res) => {insertExpense(req, res)});
+    .post((req, res) => {insertExpense(req, res)})
+    .put((res, req) => {updateExpense(res, req)});
 
 router.route('/expenses/:month/:year')
     .get((req, res) => {getExpenses(req, res)});

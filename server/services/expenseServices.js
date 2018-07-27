@@ -1,4 +1,5 @@
 const Expense = require('../models/Expense');
+const { validationResult } = require('express-validator/check');
 
 function getExpense(req, res) {
     Expense
@@ -11,7 +12,7 @@ function getExpense(req, res) {
             res.json(expense);
         });
 };
-
+    
 function getExpenses(req, res) {
     let monthRec = req.params.month;
     let yearRec = req.params.year;
@@ -33,45 +34,78 @@ function getExpenses(req, res) {
 }
 
 function insertExpense(req, res) {
-    let expense = new Expense({
-        description: req.body.description,
-        amount: req.body.amount,
-        month: req.body.month,
-        year: req.body.year
-    });
-    expense.save((err) => {
-        if(err) {
-            res.send(err);
-        }
-        res.json({
-            message: 'Expense successfully added!',
-            body: expense
+
+    req.check('description', 'Description value is empty').notEmpty();
+    req.check('amount', 'Amount value is empty').notEmpty();
+    req.check('amount', 'Non numeric amount').isNumeric();
+    req.check('month', 'Month value is empty').notEmpty();
+    req.check('month', 'Non alpha amount').isAlpha();
+    req.check('year', 'Year value is empty').notEmpty();
+    req.check('year', 'Non numeric amount').isNumeric();
+
+    let errors = req.validationErrors();
+    
+    if (errors) {
+        return res.status(422).json({ errors: errors });
+    } else {
+        let expense = new Expense({
+            description: req.body.description,
+            amount: req.body.amount,
+            month: req.body.month,
+            year: req.body.year
         });
-    });
+        expense.save((err) => {
+            if(err) {
+                res.send(err);
+            }
+            res.json({
+                message: 'Expense successfully added!',
+                body: expense
+            });
+        });
+    }
 }
 
 function updateExpense(req, res) {
-    let dataToUpdate = {
-        _id: req.body._id,
-        description: req.body.description,
-        amount: req.body.amount,
-        month: req.body.month,
-        year: req.body.year    
-    };
-    Expense
-        .updateOne(
-            { _id: dataToUpdate._id },
-            dataToUpdate,
-            (err, result) => {
-                if(err) {
-                    res.send(err);
-                }
-        res.json({
-            message: 'Expense successfully updated!',
-            body: dataToUpdate,
-            result
+
+    req.check('_id', 'ID value is empty').notEmpty();
+    req.check('_id', 'Non alphamumeric ID').isAlphanumeric();
+    req.check('description', 'Description value is empty').notEmpty();
+    req.check('amount', 'Amount value is empty').notEmpty();
+    req.check('amount', 'Non numeric amount').isNumeric();
+    req.check('month', 'Month value is empty').notEmpty();
+    req.check('month', 'Non alpha amount').isAlpha();
+    req.check('year', 'Year value is empty').notEmpty();
+    req.check('year', 'Non numeric amount').isNumeric();
+
+    let errors = req.validationErrors();
+
+    if(errors) {
+        return res.status(422).json({ errors: errors });
+    } else {
+        let dataToUpdate = {
+            _id: req.body._id,
+            description: req.body.description,
+            amount: req.body.amount,
+            month: req.body.month,
+            year: req.body.year    
+        };
+        Expense
+            .updateOne(
+                { _id: dataToUpdate._id },
+                dataToUpdate,
+                (err, result) => {
+                    if(err) {
+                        res.send(err);
+                    }
+            res.json({
+                message: 'Expense successfully updated!',
+                body: dataToUpdate,
+                result
+            });
         });
-    });
+       
+    }
 }
 
 function deleteExpense(req, res) {
