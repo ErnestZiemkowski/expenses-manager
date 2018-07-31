@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { EMLINK } from 'constants';
 
 const queryString = require('querystring');
 
@@ -15,7 +16,11 @@ class Add extends React.Component {
             month: '',
             year: '',
             messageFromServer: '',
-            modalIsOpen: false
+            modalIsOpen: false,
+            descriptionIsValid: '',
+            amountIsValid: '',
+            monthIsValid: '',
+            yearIsValid: '',
         };
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -77,22 +82,37 @@ class Add extends React.Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-        axios.post('http://localhost:8000/expense',
-            queryString.stringify({
-                description: this.state.description,
-                amount: this.state.amount,
-                month: this.state.month,
-                year: this.state.year
-            }), {
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    }
+
+        const formEl = this.formEl;
+        const formLength = formEl.length;
+        if(formEl.checkValidity() === false) {
+            for (let i = 0; i < formLength; i++) {
+                let elem = formEl[i];
+                let stateToUpdate = elem.id + 'IsValid';
+
+                if(!elem.checkValidity()) {
+                    elem.nextSibling.innerHTML = 'invalid input';
                 }
-        ).then((response) => {
-            this.setState({
-                messageFromServer: response.data.message
-            });
-        });
+            }
+        } else {
+            e.preventDefault();
+            axios.post('http://localhost:8000/expense',
+                queryString.stringify({
+                    description: this.state.description,
+                    amount: this.state.amount,
+                    month: this.state.month,
+                    year: this.state.year
+                }), {
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        }
+                    }
+            ).then((response) => {
+                this.setState({
+                    messageFromServer: response.data.message
+                });
+            });    
+        }
     }
     render() {
         if(this.state.messageFromServer == ''){
@@ -130,7 +150,7 @@ class Add extends React.Component {
                             </Button>
                         </Link>
                         <br/>
-                        <form onSubmit={this.handleSubmit}>
+                        <form onSubmit={this.handleSubmit} noValidate ref={form => (this.formEl = form)}>
                             <label 
                                 htmlFor="description"
                             >
@@ -143,8 +163,10 @@ class Add extends React.Component {
                                 type="text"
                                 value={this.state.description}
                                 onChange={this.handleTextChange}
+                                required
                             >
                             </input>
+                            <p id='description-error'></p>
                             <br/>
                             <label 
                                 htmlFor="amount"
@@ -158,8 +180,10 @@ class Add extends React.Component {
                                 type="number"
                                 value={this.state.amount}
                                 onChange={this.handleTextChange}
+                                required
                             >
                             </input>
+                            <p id='amount-error'></p>
                             <br/>
                             <label
                                 htmlFor="month"
@@ -170,9 +194,12 @@ class Add extends React.Component {
                                 id="month"
                                 className="select"
                                 name="month"
+                                type="text"
                                 value={this.state.month}
                                 onChange={this.handleSelectChange}
+                                required
                             >
+                                <option></option>
                                 <option value="January" id="Jan">January</option>
                                 <option value="February" id="Feb">February</option>
                                 <option value="March" id="Mar">March</option>
@@ -186,6 +213,7 @@ class Add extends React.Component {
                                 <option value="November" id="Nov">November</option>
                                 <option value="December" id="Dec">December</option>
                             </select>
+                            <p id='month-error'></p>
                             <br/>
                             <label 
                                 htmlFor="year"
@@ -196,15 +224,19 @@ class Add extends React.Component {
                                 id="year"
                                 className="select"
                                 name="year"
+                                type="number"
                                 value={this.state.year}
                                 onChange={this.handleSelectChange}
+                                required
                             >
+                                <option></option>
                                 <option value="2016" id="16">2016</option>
                                 <option value="2017" id="17">2017</option>
                                 <option value="2018" id="18">2018</option>
                                 <option value="2019" id="19">2019</option>
                                 <option value="2020" id="20">2020</option>
                             </select>
+                            <p id='year-error'></p>
                             <br/>
                             <input 
                                 className="add-expense-button"
