@@ -70,38 +70,44 @@ class Update extends React.Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-        axios.put('http://localhost:8000/expense/' + this.state.id, 
-            queryString.stringify({ 
-                _id: this.state.id,
-                description: this.state.description,
-                amount: this.state.amount,
-                month: this.state.month,
-                year: this.state.year
-            }), {
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    }
+        const formEl = this.formEl;
+        const formLength = formEl.length;
+        if(formEl.checkValidity() === false) {
+            for (let i = 0; i < formLength; i++) {
+                let elem = formEl[i];
+                if(!elem.checkValidity()) {
+                    elem.nextSibling.innerHTML = 'invalid input';
                 }
-        ).then((response) => {
-            this.setState({
-                messageFromServer: response.data.message
+            }
+        } else {
+            axios.put('http://localhost:8000/expense', 
+                queryString.stringify({ 
+                    _id: this.state.id,
+                    description: this.state.description,
+                    amount: this.state.amount,
+                    month: this.state.month,
+                    year: this.state.year
+                }), {
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        }
+                    }
+            ).then((response) => {
+                this.setState({
+                    messageFromServer: response.data.message
+                });
             });
-        });
+        }
     }
     render() {
         if(this.state.messageFromServer == '') {
             return (
                 <div>
-                    <Button
-                        bsStyle="warning"
-                        bsSize="small"
+                    <span
                         onClick={this.openModal}
+                        className="glyphicon glyphicon-edit"
                     >
-                        <span
-                            className="glyphicon glyphicon-edit"
-                        >
-                        </span>
-                    </Button>
+                    </span>
                     <Modal
                         className="Modal"
                         isOpen={this.state.modalIsOpen}
@@ -112,19 +118,14 @@ class Update extends React.Component {
                             to={{pathname: '/', search: ''}}
                             style={{textDecoration: 'none'}}
                         >
-                            <Button
-                                bsStyle="danger"
-                                bsSize="small"
+                            <span
                                 onClick={this.closeModal}
+                                className="glyphicon glyphicon-remove"
                             >
-                                <span
-                                    className="closebtn glyphicon glyphicon-remove"
-                                >
-                                </span>
-                            </Button>
+                            </span>
                         </Link>
                         <br/>
-                        <form onSubmit={this.handleSubmit}>
+                        <form onSubmit={this.handleSubmit} noValidate ref={form => (this.formEl = form)}>
                             <label 
                                 htmlFor="description"
                             >
@@ -137,8 +138,10 @@ class Update extends React.Component {
                                 type="text"
                                 value={this.state.description}
                                 onChange={this.handleTextChange}
+                                required
                             >
                             </input>
+                            <p id='description-error'></p>
                             <br/>
                             <label 
                                 htmlFor="amount"
@@ -152,8 +155,10 @@ class Update extends React.Component {
                                 type="number"
                                 value={this.state.amount}
                                 onChange={this.handleTextChange}
+                                required
                             >
                             </input>
+                            <p id='amount-error'></p>
                             <br/>
                             <label
                                 htmlFor="month"
@@ -164,8 +169,10 @@ class Update extends React.Component {
                                 id="month"
                                 className="select"
                                 name="month"
+                                type="text"
                                 value={this.state.month}
                                 onChange={this.handleSelectChange}
+                                required
                             >
                                 <option value="January" id="Jan">January</option>
                                 <option value="February" id="Feb">February</option>
@@ -180,6 +187,7 @@ class Update extends React.Component {
                                 <option value="November" id="Nov">November</option>
                                 <option value="December" id="Dec">December</option>
                             </select>
+                            <p id='month-error'></p>
                             <br/>
                             <label 
                                 htmlFor="year"
@@ -190,8 +198,10 @@ class Update extends React.Component {
                                 id="year"
                                 className="select"
                                 name="year"
+                                type="text"
                                 value={this.state.year}
                                 onChange={this.handleSelectChange}
+                                required
                             >
                                 <option value="2016" id="16">2016</option>
                                 <option value="2017" id="17">2017</option>
@@ -199,11 +209,12 @@ class Update extends React.Component {
                                 <option value="2019" id="19">2019</option>
                                 <option value="2020" id="20">2020</option>
                             </select>
+                            <p id='year-error'></p>
                             <br/>
                             <input 
                                 className="add-expense-button"
                                 type="submit"
-                                value="Add Expense"
+                                value="Update Expense"
                             />
                         </form>
                     </Modal>
@@ -212,16 +223,11 @@ class Update extends React.Component {
         } else {
             return (
                 <div>
-                    <Button 
-                        bsStyle="warning"
-                        bsSize="small"
-                        onClick={this.openModal}
+                    <span
+                        onClick={this.openModal} 
+                        className="glyphicon glyphicon-edit"
                     >
-                        <span 
-                            className="glyphicon glyphicon-plus"
-                        >
-                        </span>
-                    </Button>
+                    </span>
                     <Modal
                         isOpen={this.state.modalIsOpen}
                         onAfterOpen={this.afterOpenModal}
@@ -238,8 +244,6 @@ class Update extends React.Component {
                                 style={{ textDecoration: 'none' }}
                             >
                                 <Button 
-                                    bsStyle="success" 
-                                    bsSize="small" 
                                     onClick={this.closeModal}
                                 >
                                     Close the Dialog

@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 class Delete extends React.Component {
@@ -27,21 +26,16 @@ class Delete extends React.Component {
     }
     render() {
         return (
-            <Button
-                bsStyle="danger"
-                bsSize="small"
+            <Link
+                to={{pathname: '/', search: ''}}
+                style={{textDecoration: 'none'}}
                 onClick={this.handleSubmit}
             >
-                <Link
-                    to={{pathname: '/', search: ''}}
-                    style={{textDecoration: 'none'}}
+                <span
+                    className="glyphicon glyphicon-trash"
                 >
-                    <span
-                        className="glyphicon glyphicon-remove"
-                    >
-                    </span>
-                </Link>
-            </Button>
+                </span>
+            </Link>
         )
     }
 }

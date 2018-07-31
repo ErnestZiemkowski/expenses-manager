@@ -3,7 +3,6 @@ import { Button } from 'react-bootstrap';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { EMLINK } from 'constants';
 
 const queryString = require('querystring');
 
@@ -17,10 +16,6 @@ class Add extends React.Component {
             year: '',
             messageFromServer: '',
             modalIsOpen: false,
-            descriptionIsValid: '',
-            amountIsValid: '',
-            monthIsValid: '',
-            yearIsValid: '',
         };
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -82,20 +77,17 @@ class Add extends React.Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-
         const formEl = this.formEl;
         const formLength = formEl.length;
         if(formEl.checkValidity() === false) {
             for (let i = 0; i < formLength; i++) {
                 let elem = formEl[i];
-                let stateToUpdate = elem.id + 'IsValid';
-
                 if(!elem.checkValidity()) {
                     elem.nextSibling.innerHTML = 'invalid input';
                 }
             }
         } else {
-            e.preventDefault();
+            // e.preventDefault();
             axios.post('http://localhost:8000/expense',
                 queryString.stringify({
                     description: this.state.description,
@@ -118,16 +110,17 @@ class Add extends React.Component {
         if(this.state.messageFromServer == ''){
             return (
                 <div>
-                    <Button
-                        bsStyle="success"
-                        bsSize="small"
-                        onClick={this.openModal}
-                    >
-                        <span
-                            className="glyphicon glyphicon-plus"
+                    <div className="add-field">
+                        <Button
+                            onClick={this.openModal}
                         >
-                        </span>
-                    </Button>
+                            <span
+                                className="glyphicon glyphicon-plus"
+                            >
+                            {'  '}New Expense
+                            </span>
+                        </Button>
+                    </div>
                     <Modal
                         className="Modal"
                         isOpen={this.state.modalIsOpen}
@@ -138,16 +131,11 @@ class Add extends React.Component {
                             to={{ pathname: '/', search: '' }}
                             style={{ textDecoration: 'none' }}
                         >
-                            <Button
-                                bsStyle="danger"
-                                bsSize="small"
+                            <span 
                                 onClick={this.closeModal}
+                                className="glyphicon glyphicon-remove"
                             >
-                                <span 
-                                    className="closebtn glyphicon glyphicon-remove"
-                                >
-                                </span>
-                            </Button>
+                            </span>
                         </Link>
                         <br/>
                         <form onSubmit={this.handleSubmit} noValidate ref={form => (this.formEl = form)}>
@@ -251,16 +239,17 @@ class Add extends React.Component {
         else{
             return (
                 <div>
-                    <Button 
-                        bsStyle="success"
-                        bsSize="small"
-                        onClick={this.openModal}
-                    >
-                        <span 
-                            className="glyphicon glyphicon-plus"
+                    <div className="add-field">
+                        <Button
+                            onClick={this.openModal}
                         >
-                        </span>
-                    </Button>
+                            <span
+                                className="glyphicon glyphicon-plus"
+                            >
+                            {'  '}New Expense
+                            </span>
+                        </Button>
+                    </div>
                     <Modal
                         isOpen={this.state.modalIsOpen}
                         onAfterOpen={this.afterOpenModal}
@@ -277,8 +266,6 @@ class Add extends React.Component {
                                 style={{ textDecoration: 'none' }}
                             >
                                 <Button 
-                                    bsStyle="success" 
-                                    bsSize="small" 
                                     onClick={this.closeModal}
                                 >
                                     Close the Dialog
