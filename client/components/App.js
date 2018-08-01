@@ -4,6 +4,8 @@ import axios from 'axios';
 import Add from './Add';
 import Update from './Update';
 import Delete from './Delete';
+import { Tab, Tabs } from 'react-bootstrap';
+import YearTabsRouter from './tabs/yearTabsRouter';
 
 export default class App extends Component {
 
@@ -12,22 +14,42 @@ export default class App extends Component {
     this.state = {
       selectedMonth: 'Jan',
       selectedYear: 2018,
-      data: []
+      data: [],
+      activeTab: 2018
     };
     this.getData = this.getData.bind(this);
     
   }
   componentDidMount() {
-    this.getData(this, '2018');
+    this.getData(this, 2018);
   }
   componentWillReceiveProps(nextProps) {
-    this.getData(this, '2018');
+    if (nextProps.history.location.search) {
+      let search = nextProps.history.location.search;
+      search = search.substring(1);
+      let searchObj = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+      this.setState({ activeTab: parseInt(searchObj.year) });
+      this.setState({ selectedYear: searchObj.year });
+      this.setState({ selectedMonth: searchObj.month });
+      this.getData(this, searchObj.year, searchObj.month);
+    } else {
+        this.getData(this, 2018);
+    }
+    // this.getData(this, '2018');
+  }
+  handleSelect(selectedTab) {
+    this.setState({
+      activeTab: selectedTab,
+      selectedYear: selectedTab
+    });
   }
   getData(ev, year) {
+    console.log(year);
     axios.get('http://localhost:8000/expenses/All/' + year)
       .then((response) => {
         ev.setState({ data: response.data });
         ev.setState({ selectedYear: parseInt(year) });
+        ev.setState({ selectedMonth: month });
       }).catch((error) => {
         console.log(error);
       });
@@ -47,6 +69,13 @@ export default class App extends Component {
   render() {
     return (
       <div>
+        <Tabs id="TabsMenu" activeKey={this.state.activeTab} onSelect={this.handleSelect}>
+          <Tab eventKey={2016} title={<YearTabsRouter year='2016' />}></Tab>
+          <Tab eventKey={2017} title={<YearTabsRouter year='2017' />}></Tab>
+          <Tab eventKey={2018} title={<YearTabsRouter year='2018'/>}></Tab>
+          <Tab eventKey={2019} title={<YearTabsRouter year='2019'/>}></Tab>
+          <Tab eventKey={2020} title={<YearTabsRouter year='2020'/>}></Tab>
+        </Tabs>
         <Add
           selectedMonth={this.state.selectedMonth}
           selectedYear={this.state.selectedYear}
