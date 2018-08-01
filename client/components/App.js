@@ -32,10 +32,10 @@ export default class App extends Component {
         console.log(error);
       });
   }
-  onDelete(exp) {
+  onDelete(id) {
     let expenses = this.state.data;
     for(let i = 0; i < expenses.length; i++) {
-      if(expenses[i]._id == exp._id) {
+      if(expenses[i]._id == id) {
         expenses.splice(i,1);
       }
     }
@@ -127,7 +127,10 @@ export default class App extends Component {
                   <td
                     className='button-col'
                   >
-                  <Delete id={exp._id} expense={exp} onClick={this.onDelete.bind(this, exp)}/>
+                  <Delete 
+                    id={exp._id}
+                    expense={exp}
+                    updateExpenses={this.onDelete.bind(this)}/>
                   </td>
                 </tr>
               )

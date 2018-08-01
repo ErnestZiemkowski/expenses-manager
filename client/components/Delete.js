@@ -21,7 +21,10 @@ class Delete extends React.Component {
             .then((response) => {
                 this.setState({
                     messageFromState: response.data.message
-            });
+                });
+            })
+            .then(() => {
+                this.props.updateExpenses(this.state.id);
         });
     }
     render() {
