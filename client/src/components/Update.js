@@ -1,38 +1,36 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
 import Modal from 'react-modal';
 import axios from 'axios';
+import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-
 const queryString = require('querystring');
 
-class Add extends React.Component {
+class Update extends React.Component {
     constructor() {
         super();
         this.state = {
+            id: '',
             description: '',
             amount: '',
             month: '',
             year: '',
             messageFromServer: '',
-            modalIsOpen: false,
-        };
+            modalIsOpen: false
+        }
         this.openModal = this.openModal.bind(this);
-        this.closeModal = this.closeModal.bind(this);
+        this.closeModal = this.closeModal.bind(this); 
         this.handleTextChange = this.handleTextChange.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     componentDidMount() {
         this.setState({
-            month: this.props.selectedMonth
+            id: this.props.expense._id,
+            description: this.props.expense.description,
+            amount: this.props.expense.amount,
+            month: this.props.expense.month,
+            year: this.props.expense.year,
         });
-        this.setState({
-            year: this.props.selectedYear
-        });
-    }
-    componentWillMount() {
-        Modal.setAppElement('body');
     }
     openModal() {
         this.setState({
@@ -41,22 +39,17 @@ class Add extends React.Component {
     }
     closeModal() {
         this.setState({
-            description: '',
-            amount: '',
-            month: 'Jan',
-            year: 2018,
-            messageFromServer: '',
             modalIsOpen: false
         });
     }
     handleTextChange(e) {
         e.preventDefault();
-        if(e.target.name == 'amount') {
+        if(e.target.name === 'amount') {
             this.setState({
                 amount: e.target.value
             });
         }
-        if(e.target.name == 'description') {
+        if(e.target.name === 'description') {
             this.setState({
                 description: e.target.value
             });
@@ -64,12 +57,12 @@ class Add extends React.Component {
     }
     handleSelectChange(e) {
         e.preventDefault();
-        if (e.target.name == 'month') {
+        if (e.target.name === 'month') {
             this.setState({
                 month: e.target.value
             });
         }
-        if (e.target.name == 'year') {
+        if (e.target.name === 'year') {
             this.setState({
                 year: e.target.value
             });
@@ -87,9 +80,9 @@ class Add extends React.Component {
                 }
             }
         } else {
-            // e.preventDefault();
-            axios.post('http://localhost:8000/expense',
-                queryString.stringify({
+            axios.put('expense', 
+                queryString.stringify({ 
+                    _id: this.state.id,
                     description: this.state.description,
                     amount: this.state.amount,
                     month: this.state.month,
@@ -103,24 +96,18 @@ class Add extends React.Component {
                 this.setState({
                     messageFromServer: response.data.message
                 });
-            });    
+            });
         }
     }
     render() {
-        if(this.state.messageFromServer == ''){
+        if(this.state.messageFromServer === '') {
             return (
                 <div>
-                    <div className="add-field">
-                        <Button
-                            onClick={this.openModal}
-                        >
-                            <span
-                                className="glyphicon glyphicon-plus"
-                            >
-                            {'  '}New Expense
-                            </span>
-                        </Button>
-                    </div>
+                    <span
+                        onClick={this.openModal}
+                        className="glyphicon glyphicon-edit"
+                    >
+                    </span>
                     <Modal
                         className="Modal"
                         isOpen={this.state.modalIsOpen}
@@ -128,10 +115,10 @@ class Add extends React.Component {
                         contentLabel="Add Expense"
                     >
                         <Link
-                            to={{ pathname: '/', search: '' }}
-                            style={{ textDecoration: 'none' }}
+                            to={{pathname: '/', search: ''}}
+                            style={{textDecoration: 'none'}}
                         >
-                            <span 
+                            <span
                                 onClick={this.closeModal}
                                 className="glyphicon glyphicon-remove"
                             >
@@ -187,7 +174,6 @@ class Add extends React.Component {
                                 onChange={this.handleSelectChange}
                                 required
                             >
-                                <option></option>
                                 <option value="January" id="Jan">January</option>
                                 <option value="February" id="Feb">February</option>
                                 <option value="March" id="Mar">March</option>
@@ -212,12 +198,11 @@ class Add extends React.Component {
                                 id="year"
                                 className="select"
                                 name="year"
-                                type="number"
+                                type="text"
                                 value={this.state.year}
                                 onChange={this.handleSelectChange}
                                 required
                             >
-                                <option></option>
                                 <option value="2016" id="16">2016</option>
                                 <option value="2017" id="17">2017</option>
                                 <option value="2018" id="18">2018</option>
@@ -229,27 +214,20 @@ class Add extends React.Component {
                             <input 
                                 className="add-expense-button"
                                 type="submit"
-                                value="Add Expense"
+                                value="Update Expense"
                             />
                         </form>
                     </Modal>
                 </div>
             );
-        }
-        else{
+        } else {
             return (
                 <div>
-                    <div className="add-field">
-                        <Button
-                            onClick={this.openModal}
-                        >
-                            <span
-                                className="glyphicon glyphicon-plus"
-                            >
-                            {'  '}New Expense
-                            </span>
-                        </Button>
-                    </div>
+                    <span
+                        onClick={this.openModal} 
+                        className="glyphicon glyphicon-edit"
+                    >
+                    </span>
                     <Modal
                         isOpen={this.state.modalIsOpen}
                         onAfterOpen={this.afterOpenModal}
@@ -279,4 +257,4 @@ class Add extends React.Component {
     }
 }
 
-export default Add;
+export default Update;

@@ -17,7 +17,7 @@ class Delete extends React.Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-        axios.delete('http://localhost:8000/expense/' + this.state.id)
+        axios.delete('expense/' + this.state.id)
             .then((response) => {
                 this.setState({
                     messageFromState: response.data.message

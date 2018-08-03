@@ -24,7 +24,7 @@ export default class App extends Component {
     this.getData(this, '2018');
   }
   getData(ev, year) {
-    axios.get('http://localhost:8000/expenses/All/' + year)
+    axios.get('expenses/All/' + year)
       .then((response) => {
         ev.setState({ data: response.data });
         ev.setState({ selectedYear: parseInt(year) });
@@ -35,7 +35,7 @@ export default class App extends Component {
   onDelete(id) {
     let expenses = this.state.data;
     for(let i = 0; i < expenses.length; i++) {
-      if(expenses[i]._id == id) {
+      if(expenses[i]._id === id) {
         expenses.splice(i,1);
       }
     }
