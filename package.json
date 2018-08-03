@@ -19,12 +19,13 @@
   },
   "scripts": {
     "webpack": "webpack",
-    "start": "webpack-dev-server --config ./webpack.config.js --mode development",
+    "client": "cd client && yarn start",
+    "server": "cd server && nodemon server",
+    "startaa": "webpack-dev-server --config ./webpack.config.js --mode development",
     "build": "react-scripts build",
     "test": "mocha",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:8000",
   "babel": {
     "presets": [
       "env",
@@ -41,6 +42,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
+    "concurrently": "^3.6.1",
     "jshint-loader": "^0.8.4",
     "mocha": "^5.2.0",
     "nodemon": "^1.17.5",
