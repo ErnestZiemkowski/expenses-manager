@@ -1,0 +1,6 @@
+{
+    "short_name": "Expenses Manager",
+    "name": "Expenses Manager",
+    "start_url": "./index.html",
+    "display": "standalone"
+}
