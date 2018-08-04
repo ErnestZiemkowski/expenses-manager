@@ -26,8 +26,12 @@ export default class App extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.history.location.search) {
       let search = nextProps.history.location.search;
-      search = search.substring(1);
-      let searchObj = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+      search = search.substring(10);
+      search = search.split("/");
+      let searchObj = {
+        month: search[0],
+        year: search[1]
+      };
       this.setState({ activeTab: parseInt(searchObj.year) });
       this.setState({ selectedYear: searchObj.year });
       this.setState({ selectedMonth: searchObj.month });
@@ -43,9 +47,8 @@ export default class App extends Component {
       selectedYear: selectedTab
     });
   }
-  getData(ev, year) {
-    console.log(year);
-    axios.get('http://localhost:8000/expenses/All/' + year)
+  getData(ev, year, month) {
+    axios.get('expenses/All/' + year)
       .then((response) => {
         ev.setState({ data: response.data });
         ev.setState({ selectedYear: parseInt(year) });
@@ -57,7 +60,7 @@ export default class App extends Component {
   onDelete(id) {
     let expenses = this.state.data;
     for(let i = 0; i < expenses.length; i++) {
-      if(expenses[i]._id == id) {
+      if(expenses[i]._id === id) {
         expenses.splice(i,1);
       }
     }
