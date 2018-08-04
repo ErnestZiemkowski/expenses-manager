@@ -24,11 +24,31 @@ class Add extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     componentDidMount() {
-        this.setState({
-            month: this.props.selectedMonth
-        });
+        if(this.props.selectedMonth === 'All') {
+            this.setState({
+                month: 'Jan'
+            });
+        } else {
+            this.setState({
+                month: this.props.selectedMonth
+            });    
+        }
         this.setState({
             year: this.props.selectedYear
+        });
+    }
+    componentWillReceiveProps(nextProps) {
+        if(this.props.selectedMonth === 'All') {
+            this.setState({
+                month: 'Jan'
+            });
+        } else {
+            this.setState({
+                month: this.props.selectedMonth
+            });    
+        }
+        this.setState({
+            year: nextProps.selectedYear
         });
     }
     componentWillMount() {
@@ -128,7 +148,7 @@ class Add extends React.Component {
                         contentLabel="Add Expense"
                     >
                         <Link
-                            to={{ pathname: '/', search: '' }}
+                            to={{ pathname: '/', search: '/' + this.state.month + '/' + this.state.year }}
                             style={{ textDecoration: 'none' }}
                         >
                             <span 
@@ -262,7 +282,7 @@ class Add extends React.Component {
                         >
                             <h3>{this.state.messageFromServer}</h3>
                             <Link 
-                                to={{pathname: '/', search: '' }}
+                                to={{pathname: '/', search: 'expenses/' + this.state.month + '/' + this.state.year }}
                                 style={{ textDecoration: 'none' }}
                             >
                                 <Button 

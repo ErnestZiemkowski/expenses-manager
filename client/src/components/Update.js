@@ -32,6 +32,14 @@ class Update extends React.Component {
             year: this.props.expense.year,
         });
     }
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            id: nextProps.expense._id,
+            description: nextProps.expense.description,
+            month:  nextProps.expense.month,
+            year: nextProps.expense.year
+        });
+    }
     openModal() {
         this.setState({
             modalIsOpen: true
@@ -115,7 +123,7 @@ class Update extends React.Component {
                         contentLabel="Add Expense"
                     >
                         <Link
-                            to={{pathname: '/', search: ''}}
+                            to={{pathname: '/', search: '/' + this.state.month + '/' + this.state.year}}
                             style={{textDecoration: 'none'}}
                         >
                             <span
@@ -240,7 +248,7 @@ class Update extends React.Component {
                         >
                             <h3>{this.state.messageFromServer}</h3>
                             <Link 
-                                to={{pathname: '/', search: '' }}
+                                to={{pathname: '/', search: '/' + this.state.month + '/' + this.state.year }}
                                 style={{ textDecoration: 'none' }}
                             >
                                 <Button 
