@@ -139,7 +139,7 @@ describe('Test API endpoints', function() {
         expense.save()
             .then(function() {
                 chai.request(baseUrl)
-                    .put('/expense/' + expense._id)
+                    .put('/expense')
                     .send(updateData)
                     .end(function(err, res) {
                         if(err) {
@@ -169,7 +169,6 @@ describe('Test API endpoints', function() {
                     .delete('/expense/' + expense._id)
                     .end(function(err, res) {
                         res.should.have.status(200);
-                        // console.log(res.text);
                         let data = JSON.parse(res.text);
                         data.message.should.equal('Expense successfully deleted!').be.a('string');
                         done();
