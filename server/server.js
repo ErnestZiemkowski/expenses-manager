@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
 app.use(expensesValidator());
 app.use('/', router);
 
-const port = 8000;
+const port = process.env.PORT || 8000;
 
 app.listen(port, () => {
     console.log('Server listens on port: ' + port);
