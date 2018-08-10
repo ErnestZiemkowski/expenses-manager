@@ -32,6 +32,7 @@ export default class App extends Component {
         month: search[1],
         year: search[2]
       };
+      // eslint-disable-next-line
       this.setState({ activeTab: parseInt(searchObj.year) });
       this.setState({ selectedYear: searchObj.year });
       this.setState({ selectedMonth: searchObj.month });
@@ -50,6 +51,7 @@ export default class App extends Component {
     axios.get('expenses/'+ month + '/' + year)
       .then((response) => {
         ev.setState({ data: response.data });
+        // eslint-disable-next-line
         ev.setState({ selectedYear: parseInt(year) });
         ev.setState({ selectedMonth: month });
       }).catch((error) => {
