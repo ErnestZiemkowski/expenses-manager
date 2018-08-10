@@ -9,5 +9,3 @@ ReactDOM.render(
     </HashRouter>,
     document.getElementById('root')
 );
-
-module.hot.accept();
