@@ -20,18 +20,11 @@
   },
   "scripts": {
     "webpack": "webpack",
-    "start": "webpack-dev-server --config ./webpack.config.js --mode development",
+    "start": "cd server && node server.js",
     "build": "react-scripts build",
     "test": "mocha",
-    "eject": "react-scripts eject"
-  },
-  "proxy": "http://localhost:8000",
-  "babel": {
-    "presets": [
-      "env",
-      "react",
-      "stage-2"
-    ]
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "cd client && npm install && npm start"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
