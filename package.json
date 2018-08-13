@@ -19,12 +19,10 @@
     "react-scripts": "1.1.4"
   },
   "scripts": {
-    "webpack": "webpack",
     "start": "cd server && node server.js",
-    "build": "react-scripts build",
     "test": "mocha",
-    "eject": "react-scripts eject",
-    "heroku-postbuild": "cd client && npm install && npm start"
+    "client": "cd client && npm run start",
+    "postinstall": "cd client && npm install && npm run start"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
