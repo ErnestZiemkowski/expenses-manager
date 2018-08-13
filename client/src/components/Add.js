@@ -107,7 +107,6 @@ class Add extends React.Component {
                 }
             }
         } else {
-            // e.preventDefault();
             axios.post('expense',
                 queryString.stringify({
                     description: this.state.description,

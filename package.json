@@ -19,19 +19,10 @@
     "react-scripts": "1.1.4"
   },
   "scripts": {
-    "webpack": "webpack",
-    "start": "webpack-dev-server --config ./webpack.config.js --mode development",
-    "build": "react-scripts build",
+    "start": "cd server && node server.js",
     "test": "mocha",
-    "eject": "react-scripts eject"
-  },
-  "proxy": "http://localhost:8000",
-  "babel": {
-    "presets": [
-      "env",
-      "react",
-      "stage-2"
-    ]
+    "client": "cd client && npm run start",
+    "postinstall": "cd client && npm install && npm run start"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
