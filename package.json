@@ -22,7 +22,7 @@
     "start": "cd server && node server.js",
     "test": "mocha",
     "client": "cd client && npm run start",
-    "postinstall": "cd client && npm install && npm run start"
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
