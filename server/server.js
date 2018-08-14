@@ -13,9 +13,9 @@ app.use(cors());
 // app.use(express.static(path.join(__dirname, '../client/public')));
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../client/build')));
-    app.get('*', function(req, res) {
-        res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
-      });
+    // app.get('*', function(req, res) {
+    //     res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+    //   });
 }
 
 
@@ -31,7 +31,9 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
 app.use(expensesValidator());
 app.use('/', router);
 
-const port = 8000;
+const port = process.env.PORT || 8000;
+
+app.set('port', port);
 
 app.listen(port, () => {
     console.log('Server listens on port: ' + port);
