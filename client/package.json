@@ -20,5 +20,5 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "^1.1.4"
   },
-  "proxy": "http://localhost:8000/"
+  "proxy": "https://young-anchorage-66382.herokuapp.com/"
 }
