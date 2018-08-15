@@ -2,13 +2,9 @@ h1 {
   text-align: center;
   padding-bottom: 50px;
   padding-top: 50px;
+  margin-top: 0;
   color: #fff;
   background-color: #000;
-}
-
-body {
-  /* color: #fff;
-  background-color: #000; */
 }
 
 .button-col {
@@ -45,7 +41,6 @@ table {
   left: 400px;
   right: 20px;
   bottom: 20px;
-  /* background: linear-gradient(to bottom right, #00fefd, #5c2cff); */
   background-color: #000;
   width:700px;
   border: 1px solid #000;
@@ -60,7 +55,6 @@ table {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rebeccapurple;
 }
 
 .select {
@@ -124,7 +118,6 @@ margin:0px auto;
   margin-left: 40px;
   margin-top: 20px;
   margin-bottom: 20px;
-  /* border: 1px solid #000; */
 }
 
 .closebtn{
